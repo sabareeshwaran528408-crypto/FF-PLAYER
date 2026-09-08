@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FF PLAYER | Free Fire Player Database</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "JetBrains Mono", monospace;
+            background: #051424;
+            color: #d4e4fa;
+            min-height: 100vh;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255, 83, 90, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 83, 90, 0.035) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .glow {
+            box-shadow: 0 0 30px rgba(255, 83, 90, 0.15);
+        }
+
+        .red-glow {
+            box-shadow: 0 0 25px rgba(255, 83, 90, 0.35);
+        }
+
+        .card {
+            background: #0d1c2d;
+            border: 1px solid rgba(174, 135, 134, 0.25);
+        }
+
+        .input-box {
+            background: #010f1f;
+            border: 1px solid rgba(174, 135, 134, 0.35);
+        }
+
+        .input-box:focus-within {
+            border-color: #ff535a;
+            box-shadow: 0 0 20px rgba(255, 83, 90, 0.15);
+        }
+
+        .hidden-state {
+            display: none;
+        }
+
+        .loader {
+            width: 55px;
+            height: 55px;
+            border: 4px solid rgba(255, 83, 90, 0.2);
+            border-top-color: #ff535a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="grid-bg">
+
+<!-- ========================================================= -->
+<!-- HEADER -->
+<!-- ========================================================= -->
+
+<header class="sticky top-0 z-50 bg-[#010f1f]/95 backdrop-blur border-b border-red-300/20">
+
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+        <div>
+            <div class="text-xl font-bold tracking-wider">
+                <span class="text-[#ff535a]">FF</span> PLAYER
+            </div>
+
+            <div class="text-xs text-gray-500 tracking-widest">
+                PLAYER DATABASE
+            </div>
+        </div>
+
+        <div class="hidden md:flex items-center gap-6 text-sm">
+            <a href="#" class="text-gray-300 hover:text-[#ff535a]">
+                HOME
+            </a>
+
+            <a href="#search" class="text-[#ff535a]">
+                FIND PLAYER
+            </a>
+
+            <a href="#about" class="text-gray-300 hover:text-[#ff535a]">
+                ABOUT
+            </a>
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ========================================================= -->
+<!-- MAIN -->
+<!-- ========================================================= -->
+
+<main class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- HERO -->
+
+    <section class="grid lg:grid-cols-2 gap-12 items-center">
+
+        <div>
+
+            <div class="inline-flex items-center gap-2 border border-red-400/30 px-4 py-2 mb-6 text-xs tracking-widest text-[#ffb3b0]">
+                <span class="w-2 h-2 bg-[#ff535a] rounded-full animate-pulse"></span>
+                PLAYER DATABASE • UID LOOKUP
+            </div>
+
+            <h1 class="text-5xl md:text-6xl font-bold leading-tight">
+
+                FIND ANY
+                <span class="text-[#ff535a]">PLAYER.</span>
+
+                <br>
+
+                KNOW THEIR
+                <span class="text-[#ff535a]">GAME.</span>
+
+            </h1>
+
+            <p class="mt-6 text-gray-400 text-lg leading-8 max-w-xl">
+
+                Enter a Free Fire player UID and retrieve player
+                information directly from the FF PLAYER database.
+
+            </p>
+
+        </div>
+
+
+        <!-- SEARCH PANEL -->
+
+        <div id="search" class="card rounded-xl p-6 glow">
+
+            <div class="flex items-center justify-between mb-5">
+
+                <div class="text-sm tracking-widest text-gray-300">
+                    PLAYER UID SEARCH
+                </div>
+
+                <div class="text-xs text-green-400">
+                    ● NODE ONLINE
+                </div>
+
+            </div>
+
+
+            <form id="search-form">
+
+                <label class="block text-xs tracking-widest text-gray-500 mb-2">
+                    ENTER PLAYER UID
+                </label>
+
+                <div class="input-box rounded-lg flex items-center px-4 py-3">
+
+                    <span class="text-[#ff535a] mr-3 text-lg">
+                        #
+                    </span>
+
+                    <input
+                        id="uid-input"
+                        type="text"
+                        maxlength="10"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        placeholder="e.g. 9003752246"
+                        class="w-full bg-transparent outline-none text-xl tracking-widest text-white"
+                    >
+
+                </div>
+
+
+                <div class="flex justify-between mt-3">
+
+                    <span id="uid-status" class="text-xs text-gray-500">
+                        Enter 8-10 digits
+                    </span>
+
+                    <span id="format-pill" class="text-xs text-gray-500">
+                        EMPTY
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="search-btn"
+                    type="submit"
+                    class="w-full mt-5 bg-[#ff535a] hover:bg-[#d1022c] text-black font-bold py-4 rounded-lg tracking-widest transition-all red-glow"
+                >
+                    🔎 SEARCH PLAYER
+                </button>
+
+            </form>
+
+
+            <!-- TEST UIDS -->
+
+            <div class="mt-6 pt-5 border-t border-gray-700">
+
+                <div class="text-xs text-gray-500 mb-3">
+                    DEMO DATABASE UIDS
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+
+                    <button
+                        type="button"
+                        onclick="useUid('9003752246')"
+                        class="px-3 py-2 text-xs bg-[#122131] hover:bg-[#1c2b3c] rounded"
+                    >
+                        9003752246
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="useUid('9943496137')"
+                        class="px-3 py-2 text-xs bg-[#122131] hover:bg-[#1c2b3c] rounded"
+                    >
+                        9943496137
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="useUid('7397550946')"
+                        class="px-3 py-2 text-xs bg-[#122131] hover:bg-[#1c2b3c] rounded"
+                    >
+                        7397550946
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- LOADING -->
+    <!-- ===================================================== -->
+
+    <section id="loading-state" class="hidden-state mt-12">
+
+        <div class="card rounded-xl p-12 text-center">
+
+            <div class="loader mx-auto mb-6"></div>
+
+            <h2 class="text-2xl font-bold">
+                SEARCHING PLAYER
+            </h2>
+
+            <p class="text-gray-500 mt-3">
+                Connecting to FF PLAYER database...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- ERROR -->
+    <!-- ===================================================== -->
+
+    <section id="error-state" class="hidden-state mt-12">
+
+        <div class="card rounded-xl p-10 text-center border-red-500/40">
+
+            <div class="text-5xl mb-5">
+                ⚠
+            </div>
+
+            <h2 id="error-title" class="text-2xl font-bold text-[#ff535a]">
+                PLAYER NOT FOUND
+            </h2>
+
+            <p id="error-message" class="text-gray-400 mt-3">
+                No player was found with this UID.
+            </p>
+
+            <button
+                onclick="searchAgain()"
+                class="mt-6 px-6 py-3 bg-[#1c2b3c] hover:bg-[#273647] rounded-lg"
+            >
+                TRY ANOTHER UID
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- PLAYER RESULT -->
+    <!-- ===================================================== -->
+
+    <section id="player-state" class="hidden-state mt-12">
+
+        <div class="flex items-center justify-between mb-4">
+
+            <div class="text-xs tracking-widest text-green-400">
+                ● PLAYER FOUND
+            </div>
+
+            <div id="response-time" class="text-xs text-gray-500">
+                DATABASE RESPONSE
+            </div>
+
+        </div>
+
+
+        <!-- PLAYER PROFILE -->
+
+        <div class="card rounded-xl p-6 glow">
+
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+                <div>
+
+                    <div class="text-xs text-gray-500 tracking-widest">
+                        PLAYER PROFILE
+                    </div>
+
+                    <h2
+                        id="player-name"
+                        class="text-3xl md:text-4xl font-bold mt-2 text-white"
+                    >
+                        PLAYER
+                    </h2>
+
+                    <div
+                        id="player-uid"
+                        class="text-sm text-gray-500 mt-2"
+                    >
+                        UID: -
+                    </div>
+
+                </div>
+
+
+                <div class="flex gap-4">
+
+                    <div class="bg-[#122131] px-6 py-4 rounded-lg text-center">
+
+                        <div class="text-xs text-gray-500">
+                            LEVEL
+                        </div>
+
+                        <div
+                            id="player-level"
+                            class="text-3xl font-bold text-[#ff535a]"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-[#122131] px-6 py-4 rounded-lg text-center">
+
+                        <div class="text-xs text-gray-500">
+                            SKILL
+                        </div>
+
+                        <div
+                            id="player-skill"
+                            class="text-lg font-bold text-cyan-400 mt-1"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EXPERIENCE -->
+
+            <div class="mt-8">
+
+                <div class="flex justify-between text-xs mb-2">
+
+                    <span class="text-gray-500">
+                        EXPERIENCE
+                    </span>
+
+                    <span id="experience-text" class="text-gray-300">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="h-2 bg-[#010f1f] rounded-full overflow-hidden">
+
+                    <div
+                        id="experience-bar"
+                        class="h-full bg-[#ff535a] transition-all"
+                        style="width: 0%"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RANK -->
+
+            <div class="mt-8 grid md:grid-cols-2 gap-4">
+
+                <div class="bg-[#122131] rounded-lg p-5">
+
+                    <div class="text-xs text-gray-500">
+                        CURRENT RANK
+                    </div>
+
+                    <div
+                        id="rank-name"
+                        class="text-2xl font-bold text-[#ff535a] mt-2"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="bg-[#122131] rounded-lg p-5">
+
+                    <div class="text-xs text-gray-500">
+                        RANK POINTS
+                    </div>
+
+                    <div
+                        id="rank-points"
+                        class="text-2xl font-bold text-cyan-400 mt-2"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="mt-8">
+
+                <div class="text-xs text-gray-500 tracking-widest mb-4">
+                    COMBAT STATISTICS
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+
+                    <!-- MATCHES -->
+
+                    <div class="bg-[#122131] rounded-lg p-5">
+
+                        <div class="text-xs text-gray-500">
+                            MATCHES
+                        </div>
+
+                        <div
+                            id="matches"
+                            class="text-2xl font-bold mt-2"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <!-- WINS -->
+
+                    <div class="bg-[#122131] rounded-lg p-5">
+
+                        <div class="text-xs text-gray-500">
+                            WINS
+                        </div>
+
+                        <div
+                            id="wins"
+                            class="text-2xl font-bold text-green-400 mt-2"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <!-- KILLS -->
+
+                    <div class="bg-[#122131] rounded-lg p-5">
+
+                        <div class="text-xs text-gray-500">
+                            KILLS
+                        </div>
+
+                        <div
+                            id="kills"
+                            class="text-2xl font-bold text-[#ff535a] mt-2"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+
+                    <!-- KD -->
+
+                    <div class="bg-[#122131] rounded-lg p-5">
+
+                        <div class="text-xs text-gray-500">
+                            K/D RATIO
+                        </div>
+
+                        <div
+                            id="kd-ratio"
+                            class="text-2xl font-bold text-cyan-400 mt-2"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HEADSHOT / WIN RATE -->
+
+            <div class="mt-6 grid md:grid-cols-2 gap-4">
+
+
+                <div class="bg-[#122131] rounded-lg p-5">
+
+                    <div class="flex justify-between">
+
+                        <span class="text-xs text-gray-500">
+                            HEADSHOT RATE
+                        </span>
+
+                        <span
+                            id="headshot-rate"
+                            class="font-bold"
+                        >
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-[#010f1f] rounded-full mt-3 overflow-hidden">
+
+                        <div
+                            id="headshot-bar"
+                            class="h-full bg-[#ff535a]"
+                            style="width: 0%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="bg-[#122131] rounded-lg p-5">
+
+                    <div class="flex justify-between">
+
+                        <span class="text-xs text-gray-500">
+                            WIN RATE
+                        </span>
+
+                        <span
+                            id="win-rate"
+                            class="font-bold"
+                        >
+                            0%
+                        </span>
+
+                    </div>
+
+                    <div class="h-2 bg-[#010f1f] rounded-full mt-3 overflow-hidden">
+
+                        <div
+                            id="win-bar"
+                            class="h-full bg-cyan-400"
+                            style="width: 0%"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH AGAIN -->
+
+            <div class="mt-8 flex justify-end">
+
+                <button
+                    onclick="searchAgain()"
+                    class="px-6 py-3 bg-[#1c2b3c] hover:bg-[#273647] rounded-lg text-sm"
+                >
+                    SEARCH ANOTHER PLAYER
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================================== -->
+    <!-- ABOUT -->
+    <!-- ===================================================== -->
+
+    <section id="about" class="mt-20">
+
+        <div class="card rounded-xl p-8">
+
+            <div class="text-xs text-[#ff535a] tracking-widest mb-3">
+                ABOUT FF PLAYER
+            </div>
+
+            <h2 class="text-3xl font-bold">
+                Free Fire Player Database
+            </h2>
+
+            <p class="text-gray-400 mt-4 max-w-3xl leading-7">
+
+                FF PLAYER is a gaming database project that allows
+                users to search player information using a unique
+                Free Fire UID.
+
+                Player information is retrieved from the project's
+                MySQL database through a Node.js and Express API.
+
+            </p>
+
+            <div class="mt-6 text-xs text-gray-500">
+                This project is not affiliated with or endorsed by Garena or Free Fire.
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ========================================================= -->
+<!-- FOOTER -->
+<!-- ========================================================= -->
+
+<footer class="border-t border-red-300/10 mt-16">
+
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+
+        <div class="font-bold">
+            <span class="text-[#ff535a]">FF</span> PLAYER
+        </div>
+
+        <div class="text-xs text-gray-600 mt-2">
+            PLAYER DATABASE • NODE.JS • MYSQL
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+    // =========================================================
+    // GET HTML ELEMENTS
+    // =========================================================
+
+    const searchForm = document.getElementById("search-form");
+
+    const uidInput = document.getElementById("uid-input");
+
+    const searchBtn = document.getElementById("search-btn");
+
+    const uidStatus = document.getElementById("uid-status");
+
+    const formatPill = document.getElementById("format-pill");
+
+    const loadingState = document.getElementById("loading-state");
+
+    const errorState = document.getElementById("error-state");
+
+    const playerState = document.getElementById("player-state");
+
+
+    // =========================================================
+    // UID VALIDATION
+    // =========================================================
+
+    function validateUID() {
+
+        const uid = uidInput.value.trim();
+
+        if (uid === "") {
+
+            uidStatus.textContent = "Enter 8-10 digits";
+
+            formatPill.textContent = "EMPTY";
+
+            formatPill.className = "text-xs text-gray-500";
+
+            return false;
+        }
+
+
+        if (!/^\d{8,10}$/.test(uid)) {
+
+            uidStatus.textContent = "UID must contain 8-10 digits";
+
+            formatPill.textContent = "INVALID";
+
+            formatPill.className = "text-xs text-red-400";
+
+            return false;
+        }
+
+
+        uidStatus.textContent = "UID format valid";
+
+        formatPill.textContent = "VALID";
+
+        formatPill.className = "text-xs text-green-400";
+
+        return true;
+    }
+
+
+    uidInput.addEventListener("input", validateUID);
+
+
+    // =========================================================
+    // SEARCH FORM
+    // =========================================================
+
+    searchForm.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        triggerSearch();
+
+    });
+
+
+    // =========================================================
+    // MAIN SEARCH FUNCTION
+    // =========================================================
+
+    async function triggerSearch() {
+
+        const uid = uidInput.value.trim();
+
+
+        // Validate UID
+
+        if (!validateUID()) {
+
+            showError(
+                "INVALID UID",
+                "Please enter a valid 8-10 digit numeric UID."
+            );
+
+            return;
+        }
+
+
+        // Hide old states
+
+        playerState.classList.add("hidden-state");
+
+        errorState.classList.add("hidden-state");
+
+
+        // Show loading
+
+        loadingState.classList.remove("hidden-state");
+
+
+        // Disable button
+
+        searchBtn.disabled = true;
+
+        searchBtn.textContent = "SEARCHING...";
+
+
+        const startTime = performance.now();
+
+
+        try {
+
+            // IMPORTANT:
+            // Because frontend is served by Express,
+            // we can use a relative API URL.
+
+            const response = await fetch(
+                `/api/players/${encodeURIComponent(uid)}`
+            );
+
+
+            const data = await response.json();
+
+
+            const responseTime =
+                Math.round(performance.now() - startTime);
+
+
+            console.log("API response:", data);
+
+
+            // Player not found
+
+            if (!response.ok || !data.success) {
+
+                loadingState.classList.add("hidden-state");
+
+                showError(
+                    "PLAYER NOT FOUND",
+                    `No player was found with UID: ${uid}`
+                );
+
+                return;
+            }
+
+
+            // Display player
+
+            displayPlayer(
+                data.player,
+                responseTime
+            );
+
+
+        } catch (error) {
+
+            console.error("Search error:", error);
+
+
+            loadingState.classList.add("hidden-state");
+
+
+            showError(
+                "SERVER ERROR",
+                "Unable to connect to the FF PLAYER server."
+            );
+
+        }
+
+
+        // Enable button
+
+        searchBtn.disabled = false;
+
+        searchBtn.textContent = "🔎 SEARCH PLAYER";
+
+    }
+
+
+    // =========================================================
+    // DISPLAY PLAYER DATA
+    // =========================================================
+
+    function displayPlayer(player, responseTime) {
+
+        loadingState.classList.add("hidden-state");
+
+        errorState.classList.add("hidden-state");
+
+        playerState.classList.remove("hidden-state");
+
+
+        // Basic information
+
+        document.getElementById("player-name").textContent =
+            player.player_name || "-";
+
+
+        document.getElementById("player-uid").textContent =
+            `UID: ${player.uid || "-"}`;
+
+
+        document.getElementById("player-level").textContent =
+            player.level ?? "-";
+
+
+        document.getElementById("player-skill").textContent =
+            player.skill || "-";
+
+
+        // Experience
+
+        const experience =
+            Number(player.experience) || 0;
+
+
+        const experiencePercent =
+            Math.max(0, Math.min(100, experience));
+
+
+        document.getElementById("experience-text").textContent =
+            `${experiencePercent}%`;
+
+
+        document.getElementById("experience-bar").style.width =
+            `${experiencePercent}%`;
+
+
+        // Rank
+
+        document.getElementById("rank-name").textContent =
+            player.rank_name || "-";
+
+
+        document.getElementById("rank-points").textContent =
+            Number(player.rank_points || 0).toLocaleString();
+
+
+        // Statistics
+
+        const matches =
+            Number(player.matches) || 0;
+
+
+        const wins =
+            Number(player.wins) || 0;
+
+
+        const kills =
+            Number(player.kills) || 0;
+
+
+        document.getElementById("matches").textContent =
+            matches.toLocaleString();
+
+
+        document.getElementById("wins").textContent =
+            wins.toLocaleString();
+
+
+        document.getElementById("kills").textContent =
+            kills.toLocaleString();
+
+
+        document.getElementById("kd-ratio").textContent =
+            Number(player.kd_ratio || 0).toFixed(2);
+
+
+        // Headshot
+
+        const headshot =
+            Number(player.headshot_rate) || 0;
+
+
+        document.getElementById("headshot-rate").textContent =
+            `${headshot.toFixed(2)}%`;
+
+
+        document.getElementById("headshot-bar").style.width =
+            `${Math.min(headshot, 100)}%`;
+
+
+        // Win rate
+
+        const winRate =
+            matches > 0
+                ? (wins / matches) * 100
+                : 0;
+
+
+        document.getElementById("win-rate").textContent =
+            `${winRate.toFixed(1)}%`;
+
+
+        document.getElementById("win-bar").style.width =
+            `${Math.min(winRate, 100)}%`;
+
+
+        // Response time
+
+        document.getElementById("response-time").textContent =
+            `DATABASE RESPONSE: ${responseTime}MS`;
+
+
+        // Scroll to result
+
+        playerState.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    // =========================================================
+    // SHOW ERROR
+    // =========================================================
+
+    function showError(title, message) {
+
+        loadingState.classList.add("hidden-state");
+
+        playerState.classList.add("hidden-state");
+
+        errorState.classList.remove("hidden-state");
+
+
+        document.getElementById("error-title").textContent =
+            title;
+
+
+        document.getElementById("error-message").textContent =
+            message;
+
+
+        errorState.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+
+        searchBtn.disabled = false;
+
+        searchBtn.textContent = "🔎 SEARCH PLAYER";
+
+    }
+
+
+    // =========================================================
+    // USE DEMO UID
+    // =========================================================
+
+    function useUid(uid) {
+
+        uidInput.value = uid;
+
+        validateUID();
+
+        triggerSearch();
+
+    }
+
+
+    // =========================================================
+    // SEARCH AGAIN
+    // =========================================================
+
+    function searchAgain() {
+
+        playerState.classList.add("hidden-state");
+
+        errorState.classList.add("hidden-state");
+
+        loadingState.classList.add("hidden-state");
+
+        uidInput.focus();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    // =========================================================
+    // INITIAL VALIDATION
+    // =========================================================
+
+    validateUID();
+
+</script>
+
+</body>
+</html>
