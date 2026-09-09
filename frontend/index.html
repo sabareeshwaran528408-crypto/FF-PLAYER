@@ -233,7 +233,7 @@
 
                     <button
                         type="button"
-                        onclick="useUid('9003752246')"
+                        onclick="useUid('1712408307')"
                         class="px-3 py-2 text-xs bg-[#122131] hover:bg-[#1c2b3c] rounded"
                     >
                         9003752246
@@ -241,7 +241,7 @@
 
                     <button
                         type="button"
-                        onclick="useUid('9943496137')"
+                        onclick="useUid('2704267820')"
                         class="px-3 py-2 text-xs bg-[#122131] hover:bg-[#1c2b3c] rounded"
                     >
                         9943496137
@@ -249,7 +249,7 @@
 
                     <button
                         type="button"
-                        onclick="useUid('7397550946')"
+                        onclick="useUid('9335365612')"
                         class="px-3 py-2 text-xs bg-[#122131] hover:bg-[#1c2b3c] rounded"
                     >
                         7397550946
@@ -357,12 +357,6 @@
                         PLAYER
                     </h2>
 
-                    <div
-                        id="player-uid"
-                        class="text-sm text-gray-500 mt-2"
-                    >
-                        UID: -
-                    </div>
 
                 </div>
 
@@ -920,9 +914,6 @@
             player.player_name || "-";
 
 
-        document.getElementById("player-uid").textContent =
-            `UID: ${player.uid || "-"}`;
-
 
         document.getElementById("player-level").textContent =
             player.level ?? "-";
@@ -934,20 +925,12 @@
 
         // Experience
 
-        const experience =
-            Number(player.experience) || 0;
-
-
-        const experiencePercent =
-            Math.max(0, Math.min(100, experience));
-
+        const experience = player.experience || "-";
 
         document.getElementById("experience-text").textContent =
-            `${experiencePercent}%`;
+            experience;
 
-
-        document.getElementById("experience-bar").style.width =
-            `${experiencePercent}%`;
+        document.getElementById("experience-bar").style.width = "100%";
 
 
         // Rank
